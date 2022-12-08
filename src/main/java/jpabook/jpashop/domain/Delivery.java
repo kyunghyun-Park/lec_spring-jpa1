@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter @Setter
 public class Delivery {
@@ -15,7 +17,7 @@ public class Delivery {
 
     //하나의 주문은 하나의 배송
     //@mappedBy : 연관관계의 주인이 아닌 쪽 [연관관계의 주인인 Order 클래스의 delivery(필드명) 기재]
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", fetch = LAZY)
     private Order order;
 
     @Embedded

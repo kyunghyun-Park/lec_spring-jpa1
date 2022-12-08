@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Table(name="orders") //order은 예약어라 다른 테이블명과 매치해주기 위함
 @Getter @Setter
@@ -17,7 +19,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne //여러개의 주문은 회원 한 명에 매핑될 수 있음
+    @ManyToOne(fetch = LAZY)//여러개의 주문은 회원 한 명에 매핑될 수 있음
     @JoinColumn(name = "member_id") //매핑할 컬럼
     private Member member;
 
@@ -27,7 +29,7 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     //하나의 주문은 하나의 배송
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
