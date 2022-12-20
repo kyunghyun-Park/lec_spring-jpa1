@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository //스프링 빈으로 등록, JPA 예외를 스프링 기반 예외로 예외 변환
-@RequiredArgsConstructor
+@RequiredArgsConstructor //final이 붙거나 @NotNull 이 붙은 필드의 생성자를 자동 생성해주는 롬복 어노테이션
 public class MemberRepository {
 
     //@PersistenceContext //엔티티 메니저( EntityManager ) 주입

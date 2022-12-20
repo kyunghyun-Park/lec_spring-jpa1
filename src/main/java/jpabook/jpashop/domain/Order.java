@@ -56,7 +56,6 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
-    //==연관관계 편의 메서드==//
 
     /*public static void main(String[] args) {
         Member member =  new Member();
@@ -65,4 +64,47 @@ public class Order {
         //member.getOrders().add(order); //이 라인이 없어도 됨
         order.setMember(member);
     }*/
+    //==연관관계 편의 메서드==//
+
+    //==생성 메서드==//
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    //==비즈니스 로직==//
+    /**
+     * 주문 취소
+     */
+    public void cancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+
+        setStatus(OrderStatus.CANCEL);
+        //한 주문에 orderItem 2개일 수 있기때문에 각각 cancel
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    //==조회 로직==//
+    /**
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        //주문할 때 주문 개수 * 수량이 있기 때문에 getTotalPrice()을 += 함
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }
