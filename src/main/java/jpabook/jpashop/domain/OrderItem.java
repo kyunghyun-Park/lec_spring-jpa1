@@ -1,7 +1,9 @@
 package jpabook.jpashop.domain;
 
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 protected 와 같은 효과
 public class OrderItem {
 
     @Id @GeneratedValue
@@ -28,6 +31,12 @@ public class OrderItem {
 
     private int orderPrice; //주문 가격
     private int count; //주문 수량
+
+    //new 인스턴스 생성을 막아줌 = 서비스단에서 생성해 필드를 set하면 사용성이 떨어짐 (필드 추가, 유지보수 등)
+    //@NoArgsConstructor(access = AccessLevel.PROTECTED)와 같은 효과
+    /*protected OrderItem() {
+
+    }*/
 
     //==생성 메서드==//
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {

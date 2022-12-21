@@ -1,6 +1,8 @@
 package jpabook.jpashop.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +16,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Table(name="orders") //order은 예약어라 다른 테이블명과 매치해주기 위함
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     @Id @GeneratedValue
@@ -26,7 +29,7 @@ public class Order {
 
     //@OneToMany : 한 개의 주문은 여러개의 주문아이템을 가질 수 있음
     //@mappedBy : 연관관계의 주인이 아닌 쪽 [연관관계의 주인인 OrderItem 클래스의 order(필드명) 기재]
-    //cascade :
+    //cascade : order를 persist하면 같이 persist
     @OneToMany(mappedBy = "order" , cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -40,6 +43,10 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문상태 [ORDER, CANCEL]
+
+    /*protected Order() {
+
+    }*/
 
     //==연관관계 편의메서드==//
     public void setMember(Member member) {
