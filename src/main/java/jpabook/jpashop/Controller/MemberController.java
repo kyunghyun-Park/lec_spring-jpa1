@@ -6,10 +6,12 @@ import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,8 +27,12 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String create(@Valid MemberForm memberForm) { //@Valid : 오브젝트에 있는 @NotEmpty 적용
+    public String create(@Valid MemberForm memberForm, BindingResult result) { //@Valid : 오브젝트에 있는 @NotEmpty 적용
 
+        //에러를 담아서 처리
+        if(result.hasErrors()){
+            return "members/createMemberForm";
+        }
         Address address = new Address(memberForm.getCity(), memberForm.getStreet(), memberForm.getZipcode());
 
         Member member = new Member();
@@ -36,5 +42,12 @@ public class MemberController {
         memberService.join(member);
         return "redirect:/";
 
+    }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
 }
